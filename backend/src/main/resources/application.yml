@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: EduBase
+  datasource:
+    url: jdbc:h2:mem:edubase;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+edubase:
+  cors:
+    allowed-origins: http://localhost:4200,http://127.0.0.1:4200
+
+---
+# Perfil PostgreSQL: ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/edubase
+    driver-class-name: org.postgresql.Driver
+    username: edubase
+    password: edubase
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
