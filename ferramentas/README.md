@@ -4,40 +4,43 @@ Scripts utilitários do repositório.
 
 ## /finalizar
 
-`finalizar.sh` pega as mudanças, verifica a branch, **monta a mensagem de commit automaticamente** com base no que foi alterado e faz o push.
+`finalizar.sh` pega as mudanças, verifica a branch, **monta a mensagem de commit automaticamente** e faz o push na `develop`.
 
 ```bash
-# Monta tudo e pede confirmação
 ./ferramentas/finalizar.sh
-
-# Sem confirmação
 ./ferramentas/finalizar.sh -y
 
-# Usando uma mensagem própria
-./ferramentas/finalizar.sh "feat: adiciona entidades JPA"
-
-# Trocar a branch permitida (padrão: develop)
-./ferramentas/finalizar.sh --branch main
+# Título + corpo manuais (opcional)
+./ferramentas/finalizar.sh \
+  "#FIX #EDIT Exibe mensagens amigáveis ao cadastrar qualificação duplicada" \
+  "Adicionadas as chaves em messages.properties, alinhadas a validarPrimaryKey()..."
 ```
 
-### O que ele faz
+### Formato do commit
 
-1. Verifica se está na branch `develop` (aborta se não estiver)
+```
+#ADD #EDIT Título amigável descrevendo o ganho para o usuário/negócio
+
+Parágrafo detalhado: o que foi alterado, em quais arquivos/áreas, e o porquê
+da mudança (evitar erro genérico, alinhar validação, etc.).
+```
+
+Tags usadas na frente do título:
+
+| Tag | Quando |
+|-----|--------|
+| `#ADD` | Há arquivos novos |
+| `#EDIT` | Há arquivos alterados ou renomeados |
+| `#DEL` | Há arquivos removidos |
+| `#FIX` | Caminhos sugerem correção (fix/bug/hotfix) |
+| `#DOC` | Mudança só em documentação (`.md`) |
+
+### Fluxo
+
+1. Confere branch `develop`
 2. `git add -A`
-3. Analisa os arquivos e **gera a mensagem** no padrão `tipo(escopo): resumo`, com o corpo listando os arquivos
-4. Mostra o resumo e pede confirmação (pule com `-y`)
+3. Gera mensagem no padrão acima
+4. Confirma (pule com `-y`)
 5. `git commit` + `git push origin develop`
 
-### Como a mensagem é gerada
-
-- **Escopo**: `backend`, `frontend`, `ferramentas`, `docs` ou `repo` (vários)
-- **Tipo**: `docs` (só `.md`), `test` (arquivos de teste), `feat` (predominam novos arquivos), `refactor` (predominam alterações), senão `chore`
-- **Resumo**: contagem de arquivos novos/alterados/removidos/renomeados
-- **Corpo**: lista `name-status` das mudanças
-
-Também bloqueia arquivos sensíveis (`.env`, `credentials.json`, chaves) no stage.
-
-> Sugestão: crie um alias para chamar como `/finalizar`:
-> ```bash
-> alias finalizar='./ferramentas/finalizar.sh'
-> ```
+Bloqueia `.env`, `credentials.json` e chaves no stage.
