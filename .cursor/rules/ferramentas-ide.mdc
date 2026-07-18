@@ -1,0 +1,22 @@
+---
+description: Comandos /front e /back abrem apps no terminal integrado do Cursor
+globs:
+alwaysApply: true
+---
+
+# Ferramentas EduBase — /front e /back
+
+Quando o usuário pedir `/front`, `/back`, ou "suba o frontend/backend":
+
+1. **Não** use Windows Terminal (`wt.exe`) nem terminal externo.
+2. Abra um **novo terminal integrado do Cursor** com a ferramenta Shell (`block_until_ms: 0`).
+3. Rode o script com `--here` para executar nesse terminal:
+
+- Frontend: `./ferramentas/front.sh --here`
+- Backend: `./ferramentas/back.sh --here`
+
+4. Confirme as URLs:
+- Backend: http://localhost:8080/api/health
+- Frontend: http://localhost:4200
+
+Alternativa nativa na IDE (sem agente): `Ctrl+Shift+P` → `Tasks: Run Task` → `EduBase Frontend` ou `EduBase Backend` (definidas em `.vscode/tasks.json`, `panel: new`).
