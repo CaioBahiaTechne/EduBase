@@ -1,0 +1,9 @@
+# EduBase
+node_modules/
+dist/
+target/
+.idea/
+*.iml
+.vscode/
+*.log
+.DS_Store
