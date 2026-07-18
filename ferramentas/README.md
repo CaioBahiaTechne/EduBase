@@ -2,9 +2,25 @@
 
 Scripts utilitários do repositório.
 
+## /commit
+
+Gera e **imprime apenas o texto** da mensagem de commit (não committa nem faz push).
+
+```bash
+./ferramentas/commit.sh
+
+# Copiar para a área de transferência (WSL)
+./ferramentas/commit.sh | clip.exe
+
+# Usar no commit manual
+git commit -m "$(./ferramentas/commit.sh)"
+```
+
+Não altera o index do Git (usa index temporário para analisar as mudanças).
+
 ## /finalizar
 
-`finalizar.sh` pega as mudanças, verifica a branch, **monta a mensagem de commit automaticamente** e faz o push na `develop`.
+Pega as mudanças, verifica a branch `develop`, monta a mensagem e faz **commit + push**.
 
 ```bash
 ./ferramentas/finalizar.sh
@@ -13,7 +29,7 @@ Scripts utilitários do repositório.
 # Título + corpo manuais (opcional)
 ./ferramentas/finalizar.sh \
   "#FIX #EDIT Exibe mensagens amigáveis ao cadastrar qualificação duplicada" \
-  "Adicionadas as chaves em messages.properties, alinhadas a validarPrimaryKey()..."
+  "Adicionadas as chaves em messages.properties..."
 ```
 
 ### Formato do commit
@@ -21,11 +37,8 @@ Scripts utilitários do repositório.
 ```
 #ADD #EDIT Título amigável descrevendo o ganho para o usuário/negócio
 
-Parágrafo detalhado: o que foi alterado, em quais arquivos/áreas, e o porquê
-da mudança (evitar erro genérico, alinhar validação, etc.).
+Parágrafo detalhado: o que foi alterado, em quais arquivos/áreas, e o porquê.
 ```
-
-Tags usadas na frente do título:
 
 | Tag | Quando |
 |-----|--------|
@@ -35,12 +48,4 @@ Tags usadas na frente do título:
 | `#FIX` | Caminhos sugerem correção (fix/bug/hotfix) |
 | `#DOC` | Mudança só em documentação (`.md`) |
 
-### Fluxo
-
-1. Confere branch `develop`
-2. `git add -A`
-3. Gera mensagem no padrão acima
-4. Confirma (pule com `-y`)
-5. `git commit` + `git push origin develop`
-
-Bloqueia `.env`, `credentials.json` e chaves no stage.
+A lógica de mensagem fica em `lib/gerar-mensagem.sh` (compartilhada por `/commit` e `/finalizar`).
