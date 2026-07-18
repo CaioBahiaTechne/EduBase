@@ -16,15 +16,15 @@ Checklist de entrega do desafio. Prioridade: **P0** obrigatório · **P1** recom
 
 ## Etapa 2 — Modelo e persistência
 
-- [ ] Entidade `Aluno` (nome, email)
-- [ ] Entidade `Curso` (nome)
-- [ ] Entidade `Disciplina` (nome, vínculo com Curso)
-- [ ] Entidade `Turma` (nome, vagas, status, vínculo com Disciplina)
-- [ ] Entidade `Matricula` (aluno, turma, status)
-- [ ] Enum status da matrícula: `PENDENTE`, `CONFIRMADA`, `CANCELADA`
-- [ ] Enum / status da turma: aberta / fechada (ou equivalente)
-- [ ] Repositories JPA para todas as entidades
-- [ ] Relacionamentos corretos no banco
+- [x] Entidade `Aluno` (nome, email)
+- [x] Entidade `Curso` (nome)
+- [x] Entidade `Disciplina` (nome, vínculo com Curso)
+- [x] Entidade `Turma` (nome, vagas, status, vínculo com Disciplina)
+- [x] Entidade `Matricula` (aluno, turma, status)
+- [x] Enum status da matrícula: `PENDENTE`, `CONFIRMADA`, `CANCELADA`
+- [x] Enum / status da turma: aberta / fechada (ou equivalente)
+- [x] Repositories JPA para todas as entidades
+- [x] Relacionamentos corretos no banco
 
 ---
 
@@ -105,7 +105,6 @@ Checklist de entrega do desafio. Prioridade: **P0** obrigatório · **P1** recom
 ## Diferenciais (P2 — opcional)
 
 - [ ] Swagger / OpenAPI
-- [ ] Docker / Docker Compose (Impossivel com o computador atual)
 - [ ] Testes unitários (services das regras de matrícula)
 - [ ] Lombok
 - [ ] MapStruct
