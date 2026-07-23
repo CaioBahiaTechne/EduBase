@@ -1,6 +1,23 @@
-<main class="shell">
-  <h1>{{ title }}</h1>
-  <p>Sistema Acadêmico de Matrículas</p>
-  <p>Status da API: <strong>{{ apiStatus() }}</strong></p>
-  <router-outlet />
-</main>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <a routerLink="/matriculas" class="brand-name">{{ title }}</a>
+      <p class="brand-sub">Sistema acadêmico</p>
+    </div>
+    <nav class="nav">
+      @for (link of links; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >{{ link.label }}</a>
+      }
+    </nav>
+    <p class="api-pill" [class.api-ok]="apiStatus() === 'UP'" [class.api-off]="apiStatus() === 'offline'">
+      API {{ apiStatus() }}
+    </p>
+  </aside>
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

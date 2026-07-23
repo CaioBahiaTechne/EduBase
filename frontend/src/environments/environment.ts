@@ -1,4 +1,10 @@
+/**
+ * Ambiente de desenvolvimento.
+ * apiUrl relativo usa o proxy do `ng serve` (proxy.conf.json → http://localhost:8080),
+ * evitando CORS no browser.
+ */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  /** Prefixo dos endpoints REST (mesmo contrato do backend `/api`). */
+  apiUrl: '/api'
 };
