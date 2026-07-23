@@ -6,10 +6,11 @@ Aplicação Full Stack (Spring Boot + Angular) para gerenciamento de matrículas
 
 ```
 EduBase/
-├── backend/     # Java 21 + Spring Boot 4 (API REST)
-├── frontend/    # Angular 19
-├── edubase.md   # Escopo do desafio
-└── TODO.md      # Checklist de entrega
+├── backend/        # Java 21 + Spring Boot 4 (API REST)
+├── frontend/       # Angular 19
+├── ferramentas/    # Scripts: /front, /back, /commit, /finalizar
+├── edubase.md      # Escopo do desafio
+└── TODO.md         # Checklist de entrega
 ```
 
 ## Pré-requisitos
@@ -18,21 +19,53 @@ EduBase/
 - **Maven 3.8+** (ou use o `./mvnw` do backend)
 - **Node.js 20+** e npm
 
-> **JDK:** foi instalado um Temurin 21 em `~/.local/jdk-21.0.11+10` (uso local).
-> Para o terminal: `export JAVA_HOME=$HOME/.local/jdk-21.0.11+10 && export PATH=$JAVA_HOME/bin:$PATH`
+> O script `ferramentas/back.sh` resolve `JAVA_HOME` automaticamente (variável já definida ou `~/.local/jdk-21*`).
 
-## Backend
+## Como iniciar (recomendado)
 
-```bash
-export JAVA_HOME=$HOME/.local/jdk-21.0.11+10
-export PATH=$JAVA_HOME/bin:$PATH
-cd backend
-./mvnw spring-boot:run
+Use os scripts em `ferramentas/` — eles sobem cada app em um **novo terminal integrado do Cursor**.
+
+### Pelo chat
+
+Peça `/front` ou `/back` no chat do Cursor.
+
+### Pela Command Palette
+
+```
+Ctrl+Shift+P → Tasks: Run Task → EduBase Frontend
+Ctrl+Shift+P → Tasks: Run Task → EduBase Backend
 ```
 
-- API: http://localhost:8080
-- Health: http://localhost:8080/api/health
-- H2 Console: http://localhost:8080/h2-console (JDBC URL: `jdbc:h2:mem:edubase`)
+### Pelos scripts
+
+```bash
+# Abre novo terminal na IDE e sobe o serviço
+./ferramentas/front.sh
+./ferramentas/back.sh
+
+# Ou roda neste terminal (já dentro da IDE)
+./ferramentas/front.sh --here
+./ferramentas/back.sh --here
+```
+
+| Serviço  | URL |
+|----------|-----|
+| Frontend | http://localhost:4200 |
+| Backend  | http://localhost:8080 |
+| Health   | http://localhost:8080/api/health |
+| H2 Console | http://localhost:8080/h2-console (JDBC: `jdbc:h2:mem:edubase`) |
+
+Detalhes em [`ferramentas/README.md`](ferramentas/README.md).
+
+### Alternativa manual
+
+```bash
+# Backend
+cd backend && ./mvnw spring-boot:run
+
+# Frontend (outro terminal)
+cd frontend && npm start
+```
 
 Perfil PostgreSQL (quando o banco estiver disponível):
 
@@ -40,24 +73,50 @@ Perfil PostgreSQL (quando o banco estiver disponível):
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
 
-## Frontend
+O frontend faz proxy de `/api` → `http://localhost:8080` (`proxy.conf.json`).
 
-```bash
-cd frontend
-npm start
-```
+## API REST (CRUD)
 
-- App: http://localhost:4200
-- Proxy `/api` → `http://localhost:8080` (ver `proxy.conf.json`)
+| Recurso | Base |
+|---------|------|
+| Alunos | `/api/alunos` |
+| Cursos | `/api/cursos` |
+| Disciplinas | `/api/disciplinas` |
+| Turmas | `/api/turmas` |
+| Matrículas | `/api/matriculas` |
+
+Métodos: `GET` (lista / `{id}`), `POST`, `PUT` / `{id}`, `DELETE` / `{id}`.
+
+Filtros opcionais na listagem:
+
+- Alunos: `?nome=` · `?email=`
+- Disciplinas: `?cursoId=`
+- Turmas: `?disciplinaId=` · `?status=ABERTA|FECHADA`
+- Matrículas: `?alunoId=` · `?turmaId=`
+
+### Matrícula — regras e fluxos
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `POST` | `/api/matriculas` | Matricular (status `PENDENTE`; turma deve estar `ABERTA` e com vagas) |
+| `POST` | `/api/matriculas/{id}/confirmar` | Confirma e consome 1 vaga |
+| `POST` | `/api/matriculas/{id}/cancelar` | Cancela; se era `CONFIRMADA`, devolve a vaga |
+| `GET` | `/api/matriculas/aluno/{alunoId}` | Matrículas do aluno (RN007) |
+| `GET` | `/api/matriculas/turma/{turmaId}` | Matrículas da turma (RN008) |
+
+Status possíveis: `PENDENTE` · `CONFIRMADA` · `CANCELADA`.
 
 ## CORS
 
 O backend libera origens do Angular (`http://localhost:4200`) para rotas `/api/**` via `CorsConfig`.
-Veja a explicação no chat / em `edubase.md` / abaixo.
 
-Sem CORS, o navegador bloqueia o frontend (porta 4200) de chamar a API (porta 8080),
-porque são **origens diferentes** (protocolo + host + porta).
+## Outras ferramentas
+
+```bash
+./ferramentas/commit.sh              # só imprime a mensagem de commit
+./ferramentas/finalizar.sh           # commit + push na develop
+```
 
 ## Status
 
-Etapa 1 (setup) concluída. Próximo: modelo e persistência (entidades JPA).
+Etapas 1–5 concluídas (setup, modelo, CRUD, regras de matrícula, validações). Próximo: frontend (Etapa 6).

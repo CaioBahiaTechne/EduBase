@@ -31,49 +31,49 @@ Checklist de entrega do desafio. Prioridade: **P0** obrigatório · **P1** recom
 ## Etapa 3 — Backend CRUD (API REST)
 
 ### Aluno
-- [ ] `GET` listar / buscar
-- [ ] `POST` criar
-- [ ] `PUT` atualizar
-- [ ] `DELETE` excluir
+- [x] `GET` listar / buscar
+- [x] `POST` criar
+- [x] `PUT` atualizar
+- [x] `DELETE` excluir
 
 ### Curso
-- [ ] `GET` / `POST` / `PUT` / `DELETE`
+- [x] `GET` / `POST` / `PUT` / `DELETE`
 
 ### Disciplina
-- [ ] `GET` / `POST` / `PUT` / `DELETE`
+- [x] `GET` / `POST` / `PUT` / `DELETE`
 
 ### Turma
-- [ ] `GET` / `POST` / `PUT` / `DELETE`
+- [x] `GET` / `POST` / `PUT` / `DELETE`
 
 ### Matrícula
-- [ ] `GET` / `POST` / `PUT` / `DELETE` (CRUD recomendado)
-- [ ] DTOs + mappers
-- [ ] Services com separação de responsabilidades
+- [x] `GET` / `POST` / `PUT` / `DELETE` (CRUD recomendado)
+- [x] DTOs + mappers
+- [x] Services com separação de responsabilidades
 
 ---
 
 ## Etapa 4 — Regras de negócio (P0 — núcleo)
 
-- [ ] **RN001** — Matricular somente em turmas abertas
-- [ ] **RN002** — Respeitar limite de vagas
-- [ ] **RN003** — Impedir duas matrículas do mesmo aluno na mesma turma
-- [ ] **RN004** — Status apenas: `PENDENTE` | `CONFIRMADA` | `CANCELADA`
-- [ ] **RN005** — Confirmar matrícula → alterar status + consumir 1 vaga
-- [ ] **RN006** — Cancelar matrícula confirmada → alterar status + devolver vaga
-- [ ] **RN007** — `GET` matrículas por aluno
-- [ ] **RN008** — `GET` matrículas por turma
-- [ ] Endpoints: `POST` confirmar e `POST` cancelar
+- [x] **RN001** — Matricular somente em turmas abertas
+- [x] **RN002** — Respeitar limite de vagas
+- [x] **RN003** — Impedir duas matrículas do mesmo aluno na mesma turma
+- [x] **RN004** — Status apenas: `PENDENTE` | `CONFIRMADA` | `CANCELADA`
+- [x] **RN005** — Confirmar matrícula → alterar status + consumir 1 vaga
+- [x] **RN006** — Cancelar matrícula confirmada → alterar status + devolver vaga
+- [x] **RN007** — `GET` matrículas por aluno
+- [x] **RN008** — `GET` matrículas por turma
+- [x] Endpoints: `POST` confirmar e `POST` cancelar
 
 ---
 
 ## Etapa 5 — Validações
 
-- [ ] Aluno: nome e email obrigatórios
-- [ ] Curso: nome obrigatório
-- [ ] Disciplina: nome obrigatório
-- [ ] Turma: nome obrigatório, vagas > 0, status obrigatório
-- [ ] Matrícula: aluno e turma obrigatórios
-- [ ] (P1) Bean Validation + tratamento global de exceções
+- [x] Aluno: nome e email obrigatórios
+- [x] Curso: nome obrigatório
+- [x] Disciplina: nome obrigatório
+- [x] Turma: nome obrigatório, vagas > 0, status obrigatório
+- [x] Matrícula: aluno e turma obrigatórios
+- [x] (P1) Bean Validation + tratamento global de exceções
 
 ---
 
