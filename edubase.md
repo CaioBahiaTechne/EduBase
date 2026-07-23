@@ -276,19 +276,19 @@ Frontend
 
 ↓
 
-Controller
+Controller (infrastructure/web)
 
 ↓
 
-Service
+Use Case (application)
 
 ↓
 
-Repository
+Domain + Repository port
 
 ↓
 
-Banco
+JPA adapter → Banco
 ```
 
 ---
@@ -359,25 +359,40 @@ Liberar vaga
 
 # Arquitetura
 
-Estrutura esperada:
+Estrutura do backend (DDD modular — um Bounded Context `academico`):
 
 ```
-controller/
-
-service/
-
-repository/
-
-entity/
-
-dto/
-
-mapper/
-
-exception/
-
-config/
+com.edubase/
+  shared/domain/exception/     # DomainException, NotFoundException
+  academico/
+    domain/
+      model/                   # Entidades ricas (Aluno, Curso, Disciplina, Turma, Matricula)
+      repository/              # Ports (interfaces)
+      service/                 # PoliticaMatricula (RN003)
+    application/
+      dto/                     # Request/Response
+      mapper/
+      usecase/                 # Casos de uso (CRUD + matricular/confirmar/cancelar)
+    infrastructure/
+      persistence/             # Adapters Spring Data JPA
+      web/                     # Controllers REST
+      config/                  # CORS
+      exception/               # GlobalExceptionHandler
 ```
+
+Equivalência com a estrutura clássica do desafio:
+
+| Clássico | DDD neste projeto |
+|----------|-------------------|
+| `entity` | `domain/model` |
+| `repository` | `domain/repository` + `infrastructure/persistence` |
+| `service` | `application/usecase` (+ regras em entidades) |
+| `controller` | `infrastructure/web` |
+| `dto` / `mapper` | `application/dto` / `application/mapper` |
+| `exception` / `config` | `shared` + `infrastructure` |
+
+Frontend (Angular): `pages/` (telas) + `services/` (HTTP `/api`) + `models/` + `core/` (apiUrl, erros).
+Em desenvolvimento, `ng serve` faz proxy de `/api` → `http://localhost:8080` (evita CORS).
 
 ---
 
@@ -632,8 +647,9 @@ Todo o código foi revisado manualmente antes da entrega.
 ## Decisões
 
 - Stack: Spring Boot 4 (Java 21) + Angular 19 + H2 (perfil PostgreSQL opcional).
-- Camadas: controller → service → repository; DTOs + mappers manuais; tratamento global de exceções.
+- Camadas DDD: domain → application (use cases) → infrastructure (web/JPA); DTOs + mappers manuais; tratamento global de exceções.
 - Status de matrícula alterado apenas via `POST .../confirmar` e `POST .../cancelar`.
+- CORS liberado para `localhost:4200` / `127.0.0.1:4200`; em dev o proxy do Angular é o caminho preferido.
 - Scripts em `ferramentas/` para subir backend/frontend e auxiliar commits no fluxo da IDE.
 
 ## Dificuldades / limitações

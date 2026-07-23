@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 import { Aluno, AlunoRequest } from '../models/edubase.models';
 
 @Injectable({ providedIn: 'root' })
 export class AlunoService {
-  private readonly url = `${environment.apiUrl}/alunos`;
+  private readonly url = apiUrl('alunos');
 
   constructor(private readonly http: HttpClient) {}
 
@@ -22,7 +22,7 @@ export class AlunoService {
   }
 
   buscar(id: number): Observable<Aluno> {
-    return this.http.get<Aluno>(`${this.url}/${id}`);
+    return this.http.get<Aluno>(apiUrl('alunos', id));
   }
 
   criar(body: AlunoRequest): Observable<Aluno> {
@@ -30,10 +30,10 @@ export class AlunoService {
   }
 
   atualizar(id: number, body: AlunoRequest): Observable<Aluno> {
-    return this.http.put<Aluno>(`${this.url}/${id}`, body);
+    return this.http.put<Aluno>(apiUrl('alunos', id), body);
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.http.delete<void>(apiUrl('alunos', id));
   }
 }

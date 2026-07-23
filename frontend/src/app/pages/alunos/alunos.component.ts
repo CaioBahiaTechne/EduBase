@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Aluno } from '../../models/edubase.models';
 import { AlunoService } from '../../services/aluno.service';
-import { mensagemErroApi } from '../../services/api-error';
+import { mensagemErroApi } from '../../core/api-error';
 
 @Component({
   selector: 'app-alunos',

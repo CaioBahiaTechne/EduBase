@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { apiUrl } from '../core/api-url';
 import { Disciplina, DisciplinaRequest } from '../models/edubase.models';
 
 @Injectable({ providedIn: 'root' })
 export class DisciplinaService {
-  private readonly url = `${environment.apiUrl}/disciplinas`;
+  private readonly url = apiUrl('disciplinas');
 
   constructor(private readonly http: HttpClient) {}
 
@@ -18,15 +18,19 @@ export class DisciplinaService {
     return this.http.get<Disciplina[]>(this.url, { params });
   }
 
+  buscar(id: number): Observable<Disciplina> {
+    return this.http.get<Disciplina>(apiUrl('disciplinas', id));
+  }
+
   criar(body: DisciplinaRequest): Observable<Disciplina> {
     return this.http.post<Disciplina>(this.url, body);
   }
 
   atualizar(id: number, body: DisciplinaRequest): Observable<Disciplina> {
-    return this.http.put<Disciplina>(`${this.url}/${id}`, body);
+    return this.http.put<Disciplina>(apiUrl('disciplinas', id), body);
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.http.delete<void>(apiUrl('disciplinas', id));
   }
 }

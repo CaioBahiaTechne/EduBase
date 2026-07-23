@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Disciplina, StatusTurma, Turma } from '../../models/edubase.models';
 import { DisciplinaService } from '../../services/disciplina.service';
 import { TurmaService } from '../../services/turma.service';
-import { mensagemErroApi } from '../../services/api-error';
+import { mensagemErroApi } from '../../core/api-error';
 
 @Component({
   selector: 'app-turmas',

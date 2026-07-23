@@ -63,7 +63,7 @@ No próprio terminal: `./ferramentas/back.sh --here` e `./ferramentas/front.sh -
 | Health | http://localhost:8080/api/health |
 | H2 Console | http://localhost:8080/h2-console — JDBC `jdbc:h2:mem:edubase`, user `sa`, senha vazia |
 
-O frontend usa proxy `/api` → `http://localhost:8080` (`proxy.conf.json`). CORS também libera `http://localhost:4200`.
+O frontend usa **sempre** URLs relativas `/api/...` (`environment.apiUrl`). O `ng serve` aplica proxy `/api` → `http://localhost:8080` (`proxy.conf.json`), evitando CORS no browser. O backend também libera CORS para `http://localhost:4200` e `http://127.0.0.1:4200` (chamadas diretas à API).
 
 ### Manual
 
@@ -86,7 +86,7 @@ cd backend
 ## Banco e configuração
 
 - **Padrão:** H2 em memória, `ddl-auto: update`, porta `8080` (`backend/src/main/resources/application.yml`).
-- **CORS:** `edubase.cors.allowed-origins` (localhost:4200).
+- **CORS:** `edubase.cors.allowed-origins` (`localhost:4200`, `127.0.0.1:4200`) via `CorsFilter` em `infrastructure/config`.
 - **Perfil `postgres`:** JDBC `jdbc:postgresql://localhost:5432/edubase`.
 
 Dados do H2 são perdidos ao reiniciar a API.

@@ -23,6 +23,7 @@ server:
 
 edubase:
   cors:
+    # Lista separada por vírgula (parseada em CorsConfig)
     allowed-origins: http://localhost:4200,http://127.0.0.1:4200
 
 ---

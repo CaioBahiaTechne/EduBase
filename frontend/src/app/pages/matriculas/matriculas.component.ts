@@ -5,7 +5,7 @@ import { Aluno, Matricula, Turma } from '../../models/edubase.models';
 import { AlunoService } from '../../services/aluno.service';
 import { MatriculaService } from '../../services/matricula.service';
 import { TurmaService } from '../../services/turma.service';
-import { mensagemErroApi } from '../../services/api-error';
+import { mensagemErroApi } from '../../core/api-error';
 
 @Component({
   selector: 'app-matriculas',

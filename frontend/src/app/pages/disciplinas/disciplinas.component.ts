@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Curso, Disciplina } from '../../models/edubase.models';
 import { CursoService } from '../../services/curso.service';
 import { DisciplinaService } from '../../services/disciplina.service';
-import { mensagemErroApi } from '../../services/api-error';
+import { mensagemErroApi } from '../../core/api-error';
 
 @Component({
   selector: 'app-disciplinas',
