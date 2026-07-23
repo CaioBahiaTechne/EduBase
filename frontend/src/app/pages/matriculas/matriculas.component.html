@@ -1,0 +1,113 @@
+<section class="page">
+  <header class="page-head">
+    <h2>Matrículas</h2>
+    <p>Selecione aluno e turma, matricular, confirmar ou cancelar.</p>
+  </header>
+
+  @if (erro) {
+    <p class="msg msg-erro" role="alert">{{ erro }}</p>
+  }
+  @if (sucesso) {
+    <p class="msg msg-ok">{{ sucesso }}</p>
+  }
+
+  <form class="form-panel" (ngSubmit)="matricular()">
+    <h3>Nova matrícula</h3>
+    <div class="form-grid">
+      <label>
+        Aluno
+        <select name="alunoId" [(ngModel)]="alunoId" required>
+          <option [ngValue]="null" disabled>Selecione...</option>
+          @for (a of alunos; track a.id) {
+            <option [ngValue]="a.id">{{ a.nome }} ({{ a.email }})</option>
+          }
+        </select>
+      </label>
+      <label>
+        Turma (abertas com vagas)
+        <select name="turmaId" [(ngModel)]="turmaId" required>
+          <option [ngValue]="null" disabled>Selecione...</option>
+          @for (t of turmasDisponiveis; track t.id) {
+            <option [ngValue]="t.id">{{ t.nome }} — {{ t.disciplinaNome }} ({{ t.vagas }} vagas)</option>
+          }
+        </select>
+      </label>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Matricular</button>
+    </div>
+  </form>
+
+  <div class="form-panel filtros">
+    <h3>Filtros</h3>
+    <div class="form-grid">
+      <label>
+        Por aluno
+        <select name="filtroAlunoId" [(ngModel)]="filtroAlunoId">
+          <option [ngValue]="null">Todos</option>
+          @for (a of alunos; track a.id) {
+            <option [ngValue]="a.id">{{ a.nome }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Por turma
+        <select name="filtroTurmaId" [(ngModel)]="filtroTurmaId">
+          <option [ngValue]="null">Todas</option>
+          @for (t of turmas; track t.id) {
+            <option [ngValue]="t.id">{{ t.nome }}</option>
+          }
+        </select>
+      </label>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" (click)="carregar()">Filtrar</button>
+      <button type="button" class="btn" (click)="limparFiltros()">Limpar</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Aluno</th>
+          <th>Turma</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of matriculas; track m.id) {
+          <tr>
+            <td>{{ m.id }}</td>
+            <td>{{ m.alunoNome }}</td>
+            <td>{{ m.turmaNome }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.badge-ok]="m.status === 'CONFIRMADA'"
+                [class.badge-warn]="m.status === 'PENDENTE'"
+                [class.badge-muted]="m.status === 'CANCELADA'"
+              >{{ m.status }}</span>
+            </td>
+            <td class="row-actions">
+              @if (m.status === 'PENDENTE') {
+                <button type="button" class="btn btn-sm btn-primary" (click)="confirmar(m)">Confirmar</button>
+                <button type="button" class="btn btn-sm" (click)="cancelar(m)">Cancelar</button>
+              }
+              @if (m.status === 'CONFIRMADA') {
+                <button type="button" class="btn btn-sm" (click)="cancelar(m)">Cancelar</button>
+              }
+              <button type="button" class="btn btn-sm btn-danger" (click)="excluir(m)">Excluir</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="empty">Nenhuma matrícula encontrada.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

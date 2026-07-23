@@ -1,0 +1,64 @@
+<section class="page">
+  <header class="page-head">
+    <h2>Disciplinas</h2>
+    <p>Disciplinas vinculadas a um curso.</p>
+  </header>
+
+  @if (erro) {
+    <p class="msg msg-erro" role="alert">{{ erro }}</p>
+  }
+  @if (sucesso) {
+    <p class="msg msg-ok">{{ sucesso }}</p>
+  }
+
+  <form class="form-panel" (ngSubmit)="salvar()">
+    <h3>{{ editandoId == null ? 'Nova disciplina' : 'Editar disciplina #' + editandoId }}</h3>
+    <label>
+      Nome
+      <input name="nome" [(ngModel)]="form.nome" required />
+    </label>
+    <label>
+      Curso
+      <select name="cursoId" [(ngModel)]="form.cursoId" required>
+        <option [ngValue]="null" disabled>Selecione...</option>
+        @for (c of cursos; track c.id) {
+          <option [ngValue]="c.id">{{ c.nome }}</option>
+        }
+      </select>
+    </label>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <button type="button" class="btn" (click)="iniciarNovo()">Limpar</button>
+    </div>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Curso</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of disciplinas; track d.id) {
+          <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.nome }}</td>
+            <td>{{ d.cursoNome }}</td>
+            <td class="row-actions">
+              <button type="button" class="btn btn-sm" (click)="editar(d)">Editar</button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="excluir(d)">Excluir</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty">Nenhuma disciplina cadastrada.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

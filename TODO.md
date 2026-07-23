@@ -79,26 +79,26 @@ Checklist de entrega do desafio. Prioridade: **P0** obrigatório · **P1** recom
 
 ## Etapa 6 — Frontend
 
-- [ ] Tela de alunos (CRUD)
-- [ ] Tela de cursos (CRUD)
-- [ ] Tela de disciplinas (CRUD)
-- [ ] Tela de turmas (CRUD)
-- [ ] Tela de matrículas (listar, matricular, confirmar, cancelar)
-- [ ] Integração HTTP com a API
-- [ ] Fluxo completo: selecionar aluno → turma → matricular → confirmar / cancelar
+- [x] Tela de alunos (CRUD)
+- [x] Tela de cursos (CRUD)
+- [x] Tela de disciplinas (CRUD)
+- [x] Tela de turmas (CRUD)
+- [x] Tela de matrículas (listar, matricular, confirmar, cancelar)
+- [x] Integração HTTP com a API
+- [x] Fluxo completo: selecionar aluno → turma → matricular → confirmar / cancelar
 
 ---
 
 ## Etapa 7 — Documentação e entrega
 
-- [ ] README: como executar
-- [ ] README: tecnologias utilizadas
-- [ ] README: banco e configuração
-- [ ] README: endpoints principais
-- [ ] README: fluxo de matrícula
-- [ ] README: decisões tomadas e limitações
-- [ ] README: uso de IA
-- [ ] Atualizar checklist / observações no `edubase.md` se necessário
+- [x] README: como executar
+- [x] README: tecnologias utilizadas
+- [x] README: banco e configuração
+- [x] README: endpoints principais
+- [x] README: fluxo de matrícula
+- [x] README: decisões tomadas e limitações
+- [x] README: uso de IA
+- [x] Atualizar checklist / observações no `edubase.md` se necessário
 
 ---
 

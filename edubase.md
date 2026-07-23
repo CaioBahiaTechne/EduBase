@@ -580,53 +580,70 @@ Todo o código foi revisado manualmente antes da entrega.
 
 ## Backend
 
-- [ ] Spring Boot
-- [ ] API REST
-- [ ] CRUD
-- [ ] Services
-- [ ] Repository
-- [ ] DTO
-- [ ] Exceptions
+- [x] Spring Boot
+- [x] API REST
+- [x] CRUD
+- [x] Services
+- [x] Repository
+- [x] DTO
+- [x] Exceptions
 
 ---
 
 ## Frontend
 
-- [ ] Tela de alunos
-- [ ] Tela de cursos
-- [ ] Tela de disciplinas
-- [ ] Tela de turmas
-- [ ] Tela de matrículas
+- [x] Tela de alunos
+- [x] Tela de cursos
+- [x] Tela de disciplinas
+- [x] Tela de turmas
+- [x] Tela de matrículas
 
 ---
 
 ## Regras
 
-- [ ] Turma aberta
-- [ ] Limite de vagas
-- [ ] Matrícula única
-- [ ] Confirmar matrícula
-- [ ] Cancelar matrícula
+- [x] Turma aberta
+- [x] Limite de vagas
+- [x] Matrícula única
+- [x] Confirmar matrícula
+- [x] Cancelar matrícula
 
 ---
 
 ## Persistência
 
-- [ ] Banco configurado
-- [ ] JPA
-- [ ] Relacionamentos
+- [x] Banco configurado
+- [x] JPA
+- [x] Relacionamentos
 
 ---
 
 ## Documentação
 
-- [ ] README
-- [ ] Fluxos
-- [ ] Endpoints
-- [ ] Uso de IA
+- [x] README
+- [x] Fluxos
+- [x] Endpoints
+- [x] Uso de IA
 
 ---
 
 # Observações
 
-Espaço para registrar decisões tomadas durante o desenvolvimento, dificuldades encontradas e melhorias futuras.
+## Decisões
+
+- Stack: Spring Boot 4 (Java 21) + Angular 19 + H2 (perfil PostgreSQL opcional).
+- Camadas: controller → service → repository; DTOs + mappers manuais; tratamento global de exceções.
+- Status de matrícula alterado apenas via `POST .../confirmar` e `POST .../cancelar`.
+- Scripts em `ferramentas/` para subir backend/frontend e auxiliar commits no fluxo da IDE.
+
+## Dificuldades / limitações
+
+- H2 em memória perde dados ao reiniciar.
+- Sem auth; exclusões com FK podem falhar se houver dependentes.
+- Diferenciais (Swagger, Docker, testes amplos) ficaram de fora de propósito.
+
+## Melhorias futuras
+
+- Seed de dados de demonstração.
+- Soft-delete / rematrícula após cancelamento.
+- OpenAPI + testes das regras de matrícula.
