@@ -16,11 +16,21 @@ Aplicação Full Stack para gerenciamento de matrículas acadêmicas (desafio Tr
 
 ```
 EduBase/
-├── backend/        # API REST
+├── backend/        # API REST (DDD — Bounded Context academico)
 ├── frontend/       # Interface Angular
 ├── ferramentas/    # Scripts /front, /back, /commit, /finalizar
 ├── edubase.md      # Escopo do desafio
 └── TODO.md         # Checklist de entrega
+```
+
+Backend (`com.edubase`):
+
+```
+shared/domain/exception/     # DomainException, NotFoundException
+academico/
+  domain/                    # Modelos ricos, ports de repositório, PoliticaMatricula
+  application/               # DTOs, mappers, use cases
+  infrastructure/            # JPA adapters, controllers, CORS, exception handler
 ```
 
 ## Pré-requisitos
@@ -126,7 +136,7 @@ Telas em http://localhost:4200:
 
 **Decisões**
 
-- Monólito API + SPA Angular; pacotes `controller` / `service` / `repository` / `entity` / `dto` / `mapper` / `exception` / `config`.
+- Monólito API + SPA Angular; backend em DDD modular (`academico`: domain / application / infrastructure) com um Bounded Context.
 - H2 para desenvolvimento rápido; perfil PostgreSQL pronto.
 - Status de matrícula só muda por `confirmar` / `cancelar` (não via `PUT` livre).
 - Vagas = restante disponível; decremento na confirmação.

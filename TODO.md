@@ -9,7 +9,7 @@ Checklist de entrega do desafio. Prioridade: **P0** obrigatório · **P1** recom
 - [x] Criar projeto Spring Boot (Java 21 + Maven)
 - [x] Configurar banco relacional (H2 padrão; perfil `postgres` pronto)
 - [x] Criar projeto frontend (Angular / TypeScript)
-- [x] Estruturar pastas: `controller`, `service`, `repository`, `entity`, `dto`, `mapper`, `exception`, `config`
+- [x] Estruturar pastas DDD: `academico` (domain / application / infrastructure) + `shared`
 - [x] Configurar CORS para o frontend consumir a API
 
 ---
