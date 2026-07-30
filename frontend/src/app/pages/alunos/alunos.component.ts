@@ -4,22 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { Aluno } from '../../models/edubase.models';
 import { AlunoService } from '../../services/aluno.service';
 import { mensagemErroApi } from '../../core/api-error';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-alunos',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './alunos.component.html',
-  styleUrl: './alunos.component.css'
+  templateUrl: './alunos.component.html'
 })
 export class AlunosComponent implements OnInit {
   alunos: Aluno[] = [];
   editandoId: number | null = null;
   form = { nome: '', email: '' };
-  erro = '';
-  sucesso = '';
 
-  constructor(private readonly alunoService: AlunoService) {}
+  constructor(
+    private readonly alunoService: AlunoService,
+    private readonly toast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.carregar();
@@ -28,24 +29,21 @@ export class AlunosComponent implements OnInit {
   carregar(): void {
     this.alunoService.listar().subscribe({
       next: (lista) => (this.alunos = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar alunos'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar alunos'))
     });
   }
 
   iniciarNovo(): void {
     this.editandoId = null;
     this.form = { nome: '', email: '' };
-    this.limparAvisos();
   }
 
   editar(aluno: Aluno): void {
     this.editandoId = aluno.id;
     this.form = { nome: aluno.nome, email: aluno.email };
-    this.limparAvisos();
   }
 
   salvar(): void {
-    this.limparAvisos();
     const req = { nome: this.form.nome.trim(), email: this.form.email.trim() };
     const obs =
       this.editandoId == null
@@ -54,11 +52,11 @@ export class AlunosComponent implements OnInit {
 
     obs.subscribe({
       next: () => {
-        this.sucesso = this.editandoId == null ? 'Aluno criado.' : 'Aluno atualizado.';
+        this.toast.success(this.editandoId == null ? 'Aluno criado.' : 'Aluno atualizado.');
         this.iniciarNovo();
         this.carregar();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao salvar aluno'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao salvar aluno'))
     });
   }
 
@@ -66,21 +64,15 @@ export class AlunosComponent implements OnInit {
     if (!confirm(`Excluir aluno "${aluno.nome}"?`)) {
       return;
     }
-    this.limparAvisos();
     this.alunoService.excluir(aluno.id).subscribe({
       next: () => {
-        this.sucesso = 'Aluno excluído.';
+        this.toast.success('Aluno excluído.');
         if (this.editandoId === aluno.id) {
           this.iniciarNovo();
         }
         this.carregar();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao excluir aluno'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao excluir aluno'))
     });
-  }
-
-  private limparAvisos(): void {
-    this.erro = '';
-    this.sucesso = '';
   }
 }

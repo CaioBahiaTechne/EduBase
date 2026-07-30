@@ -4,13 +4,6 @@
     <p>Selecione aluno e turma, matricular, confirmar ou cancelar.</p>
   </header>
 
-  @if (erro) {
-    <p class="msg msg-erro" role="alert">{{ erro }}</p>
-  }
-  @if (sucesso) {
-    <p class="msg msg-ok">{{ sucesso }}</p>
-  }
-
   <form class="form-panel" (ngSubmit)="matricular()">
     <h3>Nova matrícula</h3>
     <div class="form-grid">
@@ -80,10 +73,10 @@
       <tbody>
         @for (m of matriculas; track m.id) {
           <tr>
-            <td>{{ m.id }}</td>
-            <td>{{ m.alunoNome }}</td>
-            <td>{{ m.turmaNome }}</td>
-            <td>
+            <td data-label="ID">{{ m.id }}</td>
+            <td data-label="Aluno">{{ m.alunoNome }}</td>
+            <td data-label="Turma">{{ m.turmaNome }}</td>
+            <td data-label="Status">
               <span
                 class="badge"
                 [class.badge-ok]="m.status === 'CONFIRMADA'"

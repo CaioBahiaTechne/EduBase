@@ -1,0 +1,21 @@
+@if (dialog.options(); as opts) {
+  <div class="modal-backdrop" (click)="dialog.respond(false)" role="presentation"></div>
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'confirm-title'"
+    [attr.aria-describedby]="'confirm-desc'"
+  >
+    <h2 id="confirm-title" class="modal-title">{{ opts.title }}</h2>
+    <p id="confirm-desc" class="modal-msg">{{ opts.message }}</p>
+    <div class="modal-actions">
+      <button type="button" class="btn" (click)="dialog.respond(false)">
+        {{ opts.cancelLabel }}
+      </button>
+      <button type="button" class="btn btn-primary" (click)="dialog.respond(true)" autofocus>
+        {{ opts.confirmLabel }}
+      </button>
+    </div>
+  </div>
+}

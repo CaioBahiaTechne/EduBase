@@ -1,47 +1,85 @@
+/* Mobile-first shell: brand + API no topo, nav em scroll; desktop: sidebar */
+
 .layout {
-  display: grid;
-  grid-template-columns: 15rem 1fr;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem 1.1rem;
-  background: linear-gradient(165deg, #0f2a24 0%, #163a32 55%, #1a453b 100%);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "brand api"
+    "nav nav";
+  gap: 0.75rem 0.85rem;
+  align-items: start;
+  padding: 0.85rem 0.85rem 0.75rem;
+  background: linear-gradient(160deg, #0c231e 0%, #14352d 48%, #1a453b 100%);
   color: #e8f2ef;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(12, 35, 30, 0.25);
+}
+
+.brand {
+  grid-area: brand;
+  min-width: 0;
 }
 
 .brand-name {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 1.55rem;
+  font-family: var(--font-display, "Fraunces", Georgia, serif);
+  font-size: 1.4rem;
   font-weight: 650;
   color: #f4fbf8;
   text-decoration: none;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  display: inline-block;
+  transition: opacity 0.15s ease;
+}
+
+.brand-name:hover {
+  opacity: 0.9;
 }
 
 .brand-sub {
-  margin: 0.25rem 0 0;
-  font-size: 0.8rem;
-  color: #9fc0b6;
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: #8fb5aa;
+  letter-spacing: 0.01em;
 }
 
 .nav {
+  grid-area: nav;
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  gap: 0.35rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.15rem;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav a {
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.4rem;
-  color: #c5ddd5;
+  flex: 0 0 auto;
+  padding: 0.55rem 0.9rem;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  color: #b7d4cb;
   text-decoration: none;
-  font-size: 0.95rem;
-  transition: background 0.15s ease, color 0.15s ease;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: background 0.18s var(--ease, ease), color 0.18s ease, border-color 0.18s ease;
 }
 
 .nav a:hover {
@@ -50,49 +88,106 @@
 }
 
 .nav a.active {
-  background: rgba(110, 196, 168, 0.22);
+  background: rgba(143, 217, 184, 0.2);
+  border-color: rgba(143, 217, 184, 0.35);
   color: #fff;
   font-weight: 600;
 }
 
 .api-pill {
-  margin-top: auto;
-  font-size: 0.75rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.35rem;
-  background: rgba(0, 0, 0, 0.2);
+  grid-area: api;
+  margin: 0;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
   color: #b7cfc7;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.api-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #8a9e96;
 }
 
 .api-pill.api-ok {
-  color: #8fd9b8;
+  color: #9fe0c2;
+}
+
+.api-pill.api-ok .api-dot {
+  background: #5ed4a0;
+  box-shadow: 0 0 0 3px rgba(94, 212, 160, 0.25);
 }
 
 .api-pill.api-off {
   color: #f0a8a0;
 }
 
-.content {
-  padding: 1.75rem 1.5rem 2.5rem;
-  max-width: 68rem;
+.api-pill.api-off .api-dot {
+  background: #e8887e;
+  box-shadow: 0 0 0 3px rgba(232, 136, 126, 0.25);
 }
 
-@media (max-width: 720px) {
+.content {
+  flex: 1;
+  padding: 1rem 0.85rem 2rem;
+  width: 100%;
+  max-width: var(--content-max, 68rem);
+}
+
+@media (min-width: 860px) {
   .layout {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 15.5rem 1fr;
   }
 
   .sidebar {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "brand"
+      "nav"
+      "api";
+    padding: 1.5rem 1rem;
+    gap: 1.35rem;
+    box-shadow: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .brand-name {
+    font-size: 1.55rem;
   }
 
   .nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    overflow: visible;
+    gap: 0.3rem;
+    align-self: stretch;
+  }
+
+  .nav a {
+    width: 100%;
+    border-radius: 0.55rem;
+    padding: 0.6rem 0.8rem;
   }
 
   .api-pill {
-    margin-top: 0;
+    justify-self: start;
+  }
+
+  .content {
+    padding: 1.75rem 1.75rem 2.5rem;
   }
 }

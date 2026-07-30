@@ -4,7 +4,7 @@
       <a routerLink="/matriculas" class="brand-name">{{ title }}</a>
       <p class="brand-sub">Sistema acadêmico</p>
     </div>
-    <nav class="nav">
+    <nav class="nav" aria-label="Principal">
       @for (link of links; track link.path) {
         <a
           [routerLink]="link.path"
@@ -13,7 +13,13 @@
         >{{ link.label }}</a>
       }
     </nav>
-    <p class="api-pill" [class.api-ok]="apiStatus() === 'UP'" [class.api-off]="apiStatus() === 'offline'">
+    <p
+      class="api-pill"
+      [class.api-ok]="apiStatus() === 'UP'"
+      [class.api-off]="apiStatus() === 'offline'"
+      [attr.title]="'Status da API: ' + apiStatus()"
+    >
+      <span class="api-dot" aria-hidden="true"></span>
       API {{ apiStatus() }}
     </p>
   </aside>
@@ -21,3 +27,5 @@
     <router-outlet />
   </main>
 </div>
+<app-toast-container />
+<app-confirm-dialog />

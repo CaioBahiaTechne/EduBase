@@ -1,0 +1,70 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(12, 35, 30, 0.48);
+  backdrop-filter: blur(3px);
+  animation: fade-in 0.2s ease both;
+}
+
+.modal {
+  position: fixed;
+  z-index: 1101;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 1.5rem), 24rem);
+  padding: 1.25rem 1.2rem 1.15rem;
+  background: var(--bg-panel, #fff);
+  border: 1px solid var(--line, #d3dfd8);
+  border-radius: var(--radius-lg, 1rem);
+  box-shadow: 0 16px 48px rgba(12, 35, 30, 0.22);
+  animation: modal-in 0.28s var(--ease, ease) both;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.modal-msg {
+  margin: 0.65rem 0 0;
+  color: var(--muted, #5c7068);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 0.5rem)) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal {
+    animation: none;
+  }
+}
