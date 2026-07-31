@@ -4,23 +4,18 @@
     <p>Cadastro e manutenção de estudantes.</p>
   </header>
 
-  @if (erro) {
-    <p class="msg msg-erro" role="alert">{{ erro }}</p>
-  }
-  @if (sucesso) {
-    <p class="msg msg-ok">{{ sucesso }}</p>
-  }
-
   <form class="form-panel" (ngSubmit)="salvar()">
     <h3>{{ editandoId == null ? 'Novo aluno' : 'Editar aluno #' + editandoId }}</h3>
-    <label>
-      Nome
-      <input name="nome" [(ngModel)]="form.nome" required autocomplete="name" />
-    </label>
-    <label>
-      E-mail
-      <input name="email" type="email" [(ngModel)]="form.email" required autocomplete="email" />
-    </label>
+    <div class="form-grid">
+      <label>
+        Nome
+        <input name="nome" [(ngModel)]="form.nome" required autocomplete="name" />
+      </label>
+      <label>
+        E-mail
+        <input name="email" type="email" [(ngModel)]="form.email" required autocomplete="email" />
+      </label>
+    </div>
     <div class="actions">
       <button type="submit" class="btn btn-primary">Salvar</button>
       <button type="button" class="btn" (click)="iniciarNovo()">Limpar</button>
@@ -40,9 +35,9 @@
       <tbody>
         @for (a of alunos; track a.id) {
           <tr>
-            <td>{{ a.id }}</td>
-            <td>{{ a.nome }}</td>
-            <td>{{ a.email }}</td>
+            <td data-label="ID">{{ a.id }}</td>
+            <td data-label="Nome">{{ a.nome }}</td>
+            <td data-label="E-mail">{{ a.email }}</td>
             <td class="row-actions">
               <button type="button" class="btn btn-sm" (click)="editar(a)">Editar</button>
               <button type="button" class="btn btn-sm btn-danger" (click)="excluir(a)">Excluir</button>

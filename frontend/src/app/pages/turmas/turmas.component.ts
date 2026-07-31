@@ -5,13 +5,13 @@ import { Disciplina, StatusTurma, Turma } from '../../models/edubase.models';
 import { DisciplinaService } from '../../services/disciplina.service';
 import { TurmaService } from '../../services/turma.service';
 import { mensagemErroApi } from '../../core/api-error';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-turmas',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './turmas.component.html',
-  styleUrl: './turmas.component.css'
+  templateUrl: './turmas.component.html'
 })
 export class TurmasComponent implements OnInit {
   turmas: Turma[] = [];
@@ -23,19 +23,18 @@ export class TurmasComponent implements OnInit {
     status: 'ABERTA' as StatusTurma,
     disciplinaId: null as number | null
   };
-  erro = '';
-  sucesso = '';
   readonly statusOpcoes: StatusTurma[] = ['ABERTA', 'FECHADA'];
 
   constructor(
     private readonly turmaService: TurmaService,
-    private readonly disciplinaService: DisciplinaService
+    private readonly disciplinaService: DisciplinaService,
+    private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
     this.disciplinaService.listar().subscribe({
       next: (lista) => (this.disciplinas = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar disciplinas'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar disciplinas'))
     });
     this.carregar();
   }
@@ -43,14 +42,13 @@ export class TurmasComponent implements OnInit {
   carregar(): void {
     this.turmaService.listar().subscribe({
       next: (lista) => (this.turmas = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar turmas'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar turmas'))
     });
   }
 
   iniciarNovo(): void {
     this.editandoId = null;
     this.form = { nome: '', vagas: 30, status: 'ABERTA', disciplinaId: null };
-    this.limparAvisos();
   }
 
   editar(turma: Turma): void {
@@ -61,13 +59,11 @@ export class TurmasComponent implements OnInit {
       status: turma.status,
       disciplinaId: turma.disciplinaId
     };
-    this.limparAvisos();
   }
 
   salvar(): void {
-    this.limparAvisos();
     if (this.form.disciplinaId == null) {
-      this.erro = 'Selecione uma disciplina.';
+      this.toast.error('Selecione uma disciplina.');
       return;
     }
     const req = {
@@ -83,11 +79,11 @@ export class TurmasComponent implements OnInit {
 
     obs.subscribe({
       next: () => {
-        this.sucesso = this.editandoId == null ? 'Turma criada.' : 'Turma atualizada.';
+        this.toast.success(this.editandoId == null ? 'Turma criada.' : 'Turma atualizada.');
         this.iniciarNovo();
         this.carregar();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao salvar turma'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao salvar turma'))
     });
   }
 
@@ -95,21 +91,15 @@ export class TurmasComponent implements OnInit {
     if (!confirm(`Excluir turma "${turma.nome}"?`)) {
       return;
     }
-    this.limparAvisos();
     this.turmaService.excluir(turma.id).subscribe({
       next: () => {
-        this.sucesso = 'Turma excluída.';
+        this.toast.success('Turma excluída.');
         if (this.editandoId === turma.id) {
           this.iniciarNovo();
         }
         this.carregar();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao excluir turma'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao excluir turma'))
     });
-  }
-
-  private limparAvisos(): void {
-    this.erro = '';
-    this.sucesso = '';
   }
 }

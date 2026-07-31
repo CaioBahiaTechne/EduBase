@@ -23,8 +23,8 @@ server:
 
 edubase:
   cors:
-    # Lista separada por vírgula (parseada em CorsConfig)
-    allowed-origins: http://localhost:4200,http://127.0.0.1:4200
+    # Patterns separados por vírgula (* = qualquer Origin em local/desafio; sem cookies)
+    allowed-origin-patterns: "*"
 
 ---
 # Perfil PostgreSQL: ./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres

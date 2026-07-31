@@ -6,13 +6,14 @@ import { AlunoService } from '../../services/aluno.service';
 import { MatriculaService } from '../../services/matricula.service';
 import { TurmaService } from '../../services/turma.service';
 import { mensagemErroApi } from '../../core/api-error';
+import { ToastService } from '../../core/toast.service';
+import { ConfirmDialogService } from '../../core/confirm-dialog.service';
 
 @Component({
   selector: 'app-matriculas',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './matriculas.component.html',
-  styleUrl: './matriculas.component.css'
+  templateUrl: './matriculas.component.html'
 })
 export class MatriculasComponent implements OnInit {
   matriculas: Matricula[] = [];
@@ -24,23 +25,22 @@ export class MatriculasComponent implements OnInit {
   filtroAlunoId: number | null = null;
   filtroTurmaId: number | null = null;
 
-  erro = '';
-  sucesso = '';
-
   constructor(
     private readonly matriculaService: MatriculaService,
     private readonly alunoService: AlunoService,
-    private readonly turmaService: TurmaService
+    private readonly turmaService: TurmaService,
+    private readonly toast: ToastService,
+    private readonly confirmDialog: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
     this.alunoService.listar().subscribe({
       next: (lista) => (this.alunos = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar alunos'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar alunos'))
     });
     this.turmaService.listar().subscribe({
       next: (lista) => (this.turmas = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar turmas'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar turmas'))
     });
     this.carregar();
   }
@@ -50,12 +50,11 @@ export class MatriculasComponent implements OnInit {
   }
 
   carregar(): void {
-    this.limparAvisos();
     const aluno = this.filtroAlunoId ?? undefined;
     const turma = this.filtroTurmaId ?? undefined;
     this.matriculaService.listar(aluno, turma).subscribe({
       next: (lista) => (this.matriculas = lista),
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao listar matrículas'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao listar matrículas'))
     });
   }
 
@@ -65,31 +64,47 @@ export class MatriculasComponent implements OnInit {
     this.carregar();
   }
 
-  matricular(): void {
-    this.limparAvisos();
+  async matricular(): Promise<void> {
     if (this.alunoId == null || this.turmaId == null) {
-      this.erro = 'Selecione aluno e turma.';
+      this.toast.error('Selecione aluno e turma.');
       return;
     }
+
+    const aluno = this.alunos.find((a) => a.id === this.alunoId);
+    const turma = this.turmas.find((t) => t.id === this.turmaId);
+    const alunoLabel = aluno ? `${aluno.nome} (${aluno.email})` : `#${this.alunoId}`;
+    const turmaLabel = turma
+      ? `${turma.nome} — ${turma.disciplinaNome}`
+      : `#${this.turmaId}`;
+
+    const ok = await this.confirmDialog.confirm({
+      title: 'Confirmar matrícula',
+      message: `Matricular ${alunoLabel} na turma ${turmaLabel}? A matrícula será criada com status PENDENTE.`,
+      confirmLabel: 'Matricular',
+      cancelLabel: 'Voltar'
+    });
+    if (!ok) {
+      return;
+    }
+
     this.matriculaService.criar({ alunoId: this.alunoId, turmaId: this.turmaId }).subscribe({
       next: () => {
-        this.sucesso = 'Matrícula criada com status PENDENTE.';
+        this.toast.success('Matrícula criada com status PENDENTE.');
         this.alunoId = null;
         this.turmaId = null;
         this.recarregarTurmasELista();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao matricular'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao matricular'))
     });
   }
 
   confirmar(m: Matricula): void {
-    this.limparAvisos();
     this.matriculaService.confirmar(m.id).subscribe({
       next: () => {
-        this.sucesso = `Matrícula #${m.id} confirmada.`;
+        this.toast.success(`Matrícula #${m.id} confirmada.`);
         this.recarregarTurmasELista();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao confirmar'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao confirmar'))
     });
   }
 
@@ -97,13 +112,12 @@ export class MatriculasComponent implements OnInit {
     if (!confirm(`Cancelar matrícula #${m.id}?`)) {
       return;
     }
-    this.limparAvisos();
     this.matriculaService.cancelar(m.id).subscribe({
       next: () => {
-        this.sucesso = `Matrícula #${m.id} cancelada.`;
+        this.toast.success(`Matrícula #${m.id} cancelada.`);
         this.recarregarTurmasELista();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao cancelar'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao cancelar'))
     });
   }
 
@@ -111,13 +125,12 @@ export class MatriculasComponent implements OnInit {
     if (!confirm(`Excluir matrícula #${m.id}?`)) {
       return;
     }
-    this.limparAvisos();
     this.matriculaService.excluir(m.id).subscribe({
       next: () => {
-        this.sucesso = 'Matrícula excluída.';
+        this.toast.success('Matrícula excluída.');
         this.recarregarTurmasELista();
       },
-      error: (err) => (this.erro = mensagemErroApi(err, 'Erro ao excluir'))
+      error: (err) => this.toast.error(mensagemErroApi(err, 'Erro ao excluir'))
     });
   }
 
@@ -126,10 +139,5 @@ export class MatriculasComponent implements OnInit {
       next: (lista) => (this.turmas = lista)
     });
     this.carregar();
-  }
-
-  private limparAvisos(): void {
-    this.erro = '';
-    this.sucesso = '';
   }
 }

@@ -4,13 +4,6 @@
     <p>Cursos da instituição.</p>
   </header>
 
-  @if (erro) {
-    <p class="msg msg-erro" role="alert">{{ erro }}</p>
-  }
-  @if (sucesso) {
-    <p class="msg msg-ok">{{ sucesso }}</p>
-  }
-
   <form class="form-panel" (ngSubmit)="salvar()">
     <h3>{{ editandoId == null ? 'Novo curso' : 'Editar curso #' + editandoId }}</h3>
     <label>
@@ -35,8 +28,8 @@
       <tbody>
         @for (c of cursos; track c.id) {
           <tr>
-            <td>{{ c.id }}</td>
-            <td>{{ c.nome }}</td>
+            <td data-label="ID">{{ c.id }}</td>
+            <td data-label="Nome">{{ c.nome }}</td>
             <td class="row-actions">
               <button type="button" class="btn btn-sm" (click)="editar(c)">Editar</button>
               <button type="button" class="btn btn-sm btn-danger" (click)="excluir(c)">Excluir</button>

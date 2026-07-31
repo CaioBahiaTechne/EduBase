@@ -1,0 +1,15 @@
+<div class="toast-stack" aria-live="polite" aria-relevant="additions">
+  @for (t of toast.toasts(); track t.id) {
+    <div
+      class="toast"
+      [class.toast-error]="t.kind === 'error'"
+      [class.toast-success]="t.kind === 'success'"
+      role="alert"
+    >
+      <span class="toast-msg">{{ t.message }}</span>
+      <button type="button" class="toast-close" (click)="toast.dismiss(t.id)" aria-label="Fechar">
+        ×
+      </button>
+    </div>
+  }
+</div>

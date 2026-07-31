@@ -4,40 +4,35 @@
     <p>Ofertas de disciplina com vagas e status.</p>
   </header>
 
-  @if (erro) {
-    <p class="msg msg-erro" role="alert">{{ erro }}</p>
-  }
-  @if (sucesso) {
-    <p class="msg msg-ok">{{ sucesso }}</p>
-  }
-
   <form class="form-panel" (ngSubmit)="salvar()">
     <h3>{{ editandoId == null ? 'Nova turma' : 'Editar turma #' + editandoId }}</h3>
-    <label>
-      Nome
-      <input name="nome" [(ngModel)]="form.nome" required />
-    </label>
-    <label>
-      Vagas
-      <input name="vagas" type="number" min="1" [(ngModel)]="form.vagas" required />
-    </label>
-    <label>
-      Status
-      <select name="status" [(ngModel)]="form.status" required>
-        @for (s of statusOpcoes; track s) {
-          <option [ngValue]="s">{{ s }}</option>
-        }
-      </select>
-    </label>
-    <label>
-      Disciplina
-      <select name="disciplinaId" [(ngModel)]="form.disciplinaId" required>
-        <option [ngValue]="null" disabled>Selecione...</option>
-        @for (d of disciplinas; track d.id) {
-          <option [ngValue]="d.id">{{ d.nome }} ({{ d.cursoNome }})</option>
-        }
-      </select>
-    </label>
+    <div class="form-grid">
+      <label>
+        Nome
+        <input name="nome" [(ngModel)]="form.nome" required />
+      </label>
+      <label>
+        Vagas
+        <input name="vagas" type="number" min="1" [(ngModel)]="form.vagas" required />
+      </label>
+      <label>
+        Status
+        <select name="status" [(ngModel)]="form.status" required>
+          @for (s of statusOpcoes; track s) {
+            <option [ngValue]="s">{{ s }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Disciplina
+        <select name="disciplinaId" [(ngModel)]="form.disciplinaId" required>
+          <option [ngValue]="null" disabled>Selecione...</option>
+          @for (d of disciplinas; track d.id) {
+            <option [ngValue]="d.id">{{ d.nome }} ({{ d.cursoNome }})</option>
+          }
+        </select>
+      </label>
+    </div>
     <div class="actions">
       <button type="submit" class="btn btn-primary">Salvar</button>
       <button type="button" class="btn" (click)="iniciarNovo()">Limpar</button>
@@ -59,11 +54,13 @@
       <tbody>
         @for (t of turmas; track t.id) {
           <tr>
-            <td>{{ t.id }}</td>
-            <td>{{ t.nome }}</td>
-            <td>{{ t.disciplinaNome }}</td>
-            <td>{{ t.vagas }}</td>
-            <td><span class="badge" [class.badge-ok]="t.status === 'ABERTA'">{{ t.status }}</span></td>
+            <td data-label="ID">{{ t.id }}</td>
+            <td data-label="Nome">{{ t.nome }}</td>
+            <td data-label="Disciplina">{{ t.disciplinaNome }}</td>
+            <td data-label="Vagas">{{ t.vagas }}</td>
+            <td data-label="Status">
+              <span class="badge" [class.badge-ok]="t.status === 'ABERTA'">{{ t.status }}</span>
+            </td>
             <td class="row-actions">
               <button type="button" class="btn btn-sm" (click)="editar(t)">Editar</button>
               <button type="button" class="btn btn-sm btn-danger" (click)="excluir(t)">Excluir</button>
